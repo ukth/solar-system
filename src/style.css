@@ -1,0 +1,27 @@
+body {
+  margin: 0;
+}
+
+.webgl {
+  position: fixed;
+  z-index: 0;
+}
+
+.control-box {
+  padding-left: 10px;
+  z-index: 1;
+  position: absolute;
+  color: white;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+}
+
+.info-box {
+  padding-right: 10px;
+  z-index: 1;
+  position: absolute;
+  right: 0;
+  color: white;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+}
