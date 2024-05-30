@@ -3,25 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Transform objects</title>
+    <title>Solar System</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <div class="control-box">
-      <p class="label">1: Mercury</p>
-      <p class="label">2: Venus</p>
-      <p class="label">3: Earth</p>
-      <p class="label">4: Mars</p>
-      <p class="label">5: Jupiter</p>
-      <p class="label">6: Saturn</p>
-      <p class="label">7: Uranus</p>
-      <p class="label">8: Neptune</p>
-      <p class="label">0: Stop Following</p>
-      <p class="label">F: Fullscreen / Exit</p>
+      <p>1: Mercury</p>
+      <p>2: Venus</p>
+      <p>3: Earth</p>
+      <p>4: Mars</p>
+      <p>5: Jupiter</p>
+      <p>6: Saturn</p>
+      <p>7: Uranus</p>
+      <p>8: Neptune</p>
+      <p>0: Stop Following</p>
+      <p>F: Fullscreen / Exit</p>
+      <p>Up: rotation speed up</p>
+      <p>Down: rotation speed down</p>
+      <p id="speed">Rotation speed: 10</p>
     </div>
     <div class="info-box">
       <p>All elements reflect their true size ratios (except planet radius).</p>
-      <p>The planet radius is scaled up 100 times for better visibility.</p>
+      <p id="scale">
+        The planet radius is scaled up 100 times for better visibility.
+      </p>
+      <p>U: Scale Up</p>
+      <p>D: Scale Down</p>
     </div>
     <canvas class="webgl"></canvas>
     <script type="module" src="./script.js"></script>
