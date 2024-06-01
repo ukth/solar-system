@@ -1,18 +1,21 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { moonData, planetData } from "./planetData";
-import { createSaturnRing } from "./createSaturn";
+import { createSaturnRing } from "./createSaturnRing";
 import { createStars } from "./createStars";
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 // 1,000,000km = 1
 let sec2day = 1;
+const textureLoader = new THREE.TextureLoader();
+
 const sec2daySpeed = [
   0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 2, 3, 4, 5, 6, 7, 8,
   9, 10, 20, 30, 40, 50, 100, 200, 300, 365,
 ];
 
-const radiusRatios = [1, 5, 10, 50, 100, 500, 1000];
-let radiusRatioIndex = 4;
+const radiusRatios = [1, 5, 10, 50, 100, 500, 1000, 5000];
+let radiusRatioIndex = 6;
 
 const increaseSpeed = () => {
   for (let i = 0; i < sec2daySpeed.length - 1; i++) {
@@ -136,6 +139,20 @@ addEventListener("keydown", (event) => {
 const scene = new THREE.Scene();
 // scene.fog = new THREE.Fog(0xcccccc, 10, 500);
 
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+scene.add(ambientLight);
+const pointLight = new THREE.PointLight(0xffffff);
+pointLight.intensity = 20;
+pointLight.decay = 0.25;
+scene.add(pointLight);
+
+textureLoader.load("/stars_background.jpeg", (starsTexture) => {
+  starsTexture.colorSpace = THREE.SRGBColorSpace;
+  starsTexture.mapping = THREE.EquirectangularReflectionMapping;
+  scene.background = starsTexture;
+  scene.environment = starsTexture;
+});
+
 /**
  * Objects
  */
@@ -148,20 +165,15 @@ const pointers = [];
 planetData.forEach((planet, index) => {
   const orbit = new THREE.Mesh(
     // new THREE.TorusGeometry(planet.distance, planet.orbitWidth, 12, 96),
-    new THREE.RingGeometry(
-      planet.distance - planet.orbitWidth / 2,
-      planet.distance + planet.orbitWidth / 2,
-      1024
-    ),
+    new THREE.RingGeometry(planet.distance, planet.distance, 1024),
     new THREE.MeshBasicMaterial({
       color: 0xffffff,
-      opacity: 0.7,
+      opacity: 0.1,
       transparent: true,
-      side: THREE.DoubleSide,
+      wireframe: true,
     })
   );
   orbit.rotation.x = Math.PI / 2;
-  orbit.position.y = -planet.radius * 2;
   scene.add(orbit);
 
   const unit = planet.distance * 0.00005;
@@ -177,19 +189,15 @@ planetData.forEach((planet, index) => {
   scene.add(pointer);
   pointers.push(pointer);
 
-  const texture = new THREE.TextureLoader().load(
-    planet.texture,
-    function (texture) {
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(1, 1);
-    }
-  );
+  const texture = textureLoader.load(planet.texture, function (texture) {
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(1, 1);
+  });
   texture.colorSpace = THREE.SRGBColorSpace;
   const newPlanet = new THREE.Mesh(
     new THREE.SphereGeometry(planet.radius, 32, 32),
-    // planet surface
-    new THREE.MeshBasicMaterial({
+    new THREE.MeshLambertMaterial({
       map: texture,
     })
   );
@@ -210,43 +218,40 @@ planetData.forEach((planet, index) => {
   planetMeshes.push(newPlanet);
 });
 
-const sunTexture = new THREE.TextureLoader().load("textures/sun.jpeg");
+const sunTexture = textureLoader.load("textures/sun.jpeg");
 sunTexture.colorSpace = THREE.SRGBColorSpace;
 const sun = new THREE.Mesh(
   new THREE.SphereGeometry(0.7, 32, 32),
 
   new THREE.MeshBasicMaterial({
     map: sunTexture,
+    side: THREE.DoubleSide,
   })
 );
 scene.add(sun);
 
-const moonTexture = new THREE.TextureLoader().load(moonData.texture);
+const moonTexture = textureLoader.load(moonData.texture);
 moonTexture.colorSpace = THREE.SRGBColorSpace;
 const moon = new THREE.Mesh(
   new THREE.SphereGeometry(moonData.radius, 32, 32),
-  new THREE.MeshBasicMaterial({
+  new THREE.MeshLambertMaterial({
     map: moonTexture,
+    side: THREE.DoubleSide,
   })
 );
 
 scene.add(moon);
 
 const moonOrbit = new THREE.Mesh(
-  new THREE.RingGeometry(
-    moonData.distance - moonData.orbitWidth / 2,
-    moonData.distance + moonData.orbitWidth / 2,
-    128
-  ),
+  new THREE.RingGeometry(moonData.distance, moonData.distance, 128),
   new THREE.MeshBasicMaterial({
     color: 0xffffff,
-    opacity: 0.7,
+    opacity: 0.1,
     transparent: true,
-    side: THREE.DoubleSide,
+    wireframe: true,
   })
 );
 moonOrbit.rotation.x = Math.PI / 2;
-moonOrbit.position.y = -moonData.radius * 2;
 scene.add(moonOrbit);
 
 /**
@@ -268,6 +273,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.y = 80;
 camera.position.z = 120;
+
 scene.add(camera);
 
 const controls = new OrbitControls(camera, canvas);
@@ -330,6 +336,10 @@ const animate = () => {
   });
 
   controls.update();
+  // camera.position.x = planetMeshes[1].position.x;
+  // camera.position.z = planetMeshes[1].position.z;
+  // camera.position.y = 20;
+  // camera.lookAt(planetMeshes[1].position);
   renderer.render(scene, camera);
 
   requestAnimationFrame(animate);

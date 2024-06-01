@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 export const createStars = (scene) => {
+  return;
   for (let i = 0; i < 5000; i++) {
     const geometry = new THREE.SphereGeometry(500 + Math.random() * 20);
     const material = new THREE.MeshBasicMaterial({

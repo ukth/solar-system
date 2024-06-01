@@ -19,7 +19,7 @@ export const createSaturnRing = (planet) => {
   geometry.attributes.uv.needsUpdate = true;
 
   // Create the material
-  const material = new THREE.MeshBasicMaterial({
+  const material = new THREE.MeshLambertMaterial({
     map: texture,
     color: 0xffffff,
     side: THREE.DoubleSide,
