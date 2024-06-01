@@ -7,7 +7,21 @@ import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 // 1,000,000km = 1
 let sec2day = 1;
-const textureLoader = new THREE.TextureLoader();
+
+const loadingBox = document.querySelector(".loading-box");
+
+const loadingManager = new THREE.LoadingManager(
+  () => {
+    loadingBox.style.opacity = 0;
+    setTimeout(() => {
+      loadingBox.style.display = "none";
+    }, 2000);
+  },
+  () => {
+    loadingBox.style.opacity = 1;
+  }
+);
+const textureLoader = new THREE.TextureLoader(loadingManager);
 
 const sec2daySpeed = [
   0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 2, 3, 4, 5, 6, 7, 8,
