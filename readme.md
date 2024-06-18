@@ -13,3 +13,7 @@ npm install
 ```bash
 npm run dev
 ```
+
+## Link
+
+[Web Link](https://solar-game.ukth.dev)
