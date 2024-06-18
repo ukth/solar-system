@@ -1,7 +1,9 @@
 import * as THREE from "three";
 
 export const createSaturnRing = (planet) => {
-  const texture = new THREE.TextureLoader().load("textures/saturn_ring.png");
+  const texture = new THREE.TextureLoader().load(
+    "textures/8k_saturn_ring_alpha.png"
+  );
   texture.colorSpace = THREE.SRGBColorSpace;
 
   const geometry = new THREE.RingGeometry(0.07, 0.14, 64);

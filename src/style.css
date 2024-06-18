@@ -26,6 +26,26 @@ body {
   font-family: Arial, sans-serif;
 }
 
+.speed-box {
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  color: white;
+  font-size: 20px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.dashboard {
+  padding: 0px 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
 .loading-box {
   z-index: 5;
   /* position center */
