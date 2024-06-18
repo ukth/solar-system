@@ -6,7 +6,7 @@ export const createSaturnRing = (planet) => {
   );
   texture.colorSpace = THREE.SRGBColorSpace;
 
-  const geometry = new THREE.RingGeometry(0.07, 0.14, 64);
+  const geometry = new THREE.RingGeometry(1.2, 2.4, 64);
 
   // Adjust UV mapping
   const uv = geometry.attributes.uv.array;
@@ -23,7 +23,6 @@ export const createSaturnRing = (planet) => {
   // Create the material
   const material = new THREE.MeshLambertMaterial({
     map: texture,
-    color: 0xffffff,
     side: THREE.DoubleSide,
     transparent: true,
   });
